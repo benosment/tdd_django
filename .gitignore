@@ -52,3 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+.idea
+*/db.sqlite3
+db.sqlite3
