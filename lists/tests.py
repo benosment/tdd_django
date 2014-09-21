@@ -8,6 +8,7 @@ from lists.models import Item
 
 
 class HomePageTest(TestCase):
+
     def test_root_url_resolves_to_home_page_view(self):
         found = resolve('/')
         self.assertEqual(found.func, home_page)
@@ -39,22 +40,12 @@ class HomePageTest(TestCase):
         response = home_page(request)
 
         self.assertEqual(response.status_code, 302)  # is there a define for what these statuses are?
-        self.assertEqual(response['location'], '/')
+        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world')
 
     def test_home_page_only_saves_items_when_necessary(self):
         request = HttpRequest()
         home_page(request)
         self.assertEqual(Item.objects.count(), 0)
-
-    def test_home_page_displays_all_list_items(self):
-        Item.objects.create(text='item1')
-        Item.objects.create(text='item2')
-
-        request = HttpRequest()
-        response = home_page(request)
-
-        self.assertIn('item1', response.content.decode())
-        self.assertIn('item2', response.content.decode())
 
 
 class ItemModelTest(TestCase):
@@ -75,3 +66,19 @@ class ItemModelTest(TestCase):
         second_saved_item = saved_items[1]
         self.assertEqual(first_saved_item.text, 'The first (ever) list item')
         self.assertEqual(second_saved_item.text, 'Item the second')
+
+
+class ListViewTest(TestCase):
+
+    def test_uses_list_template(self):
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response, 'list.html')
+
+    def test_displays_all_list_items(self):
+        Item.objects.create(text='item1')
+        Item.objects.create(text='item2')
+
+        response = self.client.get('/lists/the-only-list-in-the-world/')
+
+        self.assertContains(response, 'item1')
+        self.assertContains(response, 'item2')
