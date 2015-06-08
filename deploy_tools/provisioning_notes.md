@@ -44,7 +44,7 @@ Assume we have a user account at /home/username
     # activate that site
     sudo ln -s ../sites-available/superlists.benosment.com /etc/nginx/sites-enabled/superlists.benosment.com
     # use gunicorn template
-    sed "s/SITENAME/superlists.benosment.com/g" deploy_tools/gunicorn-upstart.template.conf | sudo tee /etc/init/gunicorn-superlists.benosment.com
+    sed "s/SITENAME/superlists.benosment.com/g" deploy_tools/gunicorn-upstart.template.conf | sudo tee /etc/init/gunicorn-superlists.benosment.conf
     # start both services
     sudo service nginx reload
-    sudo start gunicorn-superlists.benosment.com
+    sudo start gunicorn-superlists.benosment
