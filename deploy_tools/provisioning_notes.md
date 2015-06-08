@@ -28,13 +28,23 @@ eg, on Ubuntu:
 ## Folder structure:
 Assume we have a user account at /home/username
 
-/home/username
-.
-`-- sites
-    `-- SITENAME
-        |-- database
-        |-- source
-        |-- static
-        |-- virtualenv
+    /home/username
+    .
+    `-- sites
+        `-- SITENAME
+            |-- database
+            |-- source
+            |-- static
+            |-- virtualenv
 
 
+## Example:
+    # use NGINX template
+    sed "s/SITENAME/superlists.benosment.com/g" deploy_tools/nginx.template.conf | sudo tee /etc/nginx/sites-available/superlists.benosment.com
+    # activate that site
+    sudo ln -s ../sites-available/superlists.benosment.com /etc/nginx/sites-enabled/superlists.benosment.com
+    # use gunicorn template
+    sed "s/SITENAME/superlists.benosment.com/g" deploy_tools/gunicorn-upstart.template.conf | sudo tee /etc/init/gunicorn-superlists.benosment.com
+    # start both services
+    sudo service nginx reload
+    sudo start gunicorn-superlists.benosment.com
