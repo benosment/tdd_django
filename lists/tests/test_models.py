@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
-
+from unittest import skip
 from lists.models import Item, List
 
 
@@ -9,7 +9,6 @@ class ItemModelTest(TestCase):
     def test_default_text(self):
         item = Item()
         self.assertEqual(item.text, '')
-
 
     def test_item_is_related_to_list(self):
         '''checks that the foreign key relationship works'''
@@ -23,10 +22,9 @@ class ItemModelTest(TestCase):
         list_ = List.objects.create()
         item = Item(list=list_, text='')
         with self.assertRaises(ValidationError):
-            item.save()
             item.full_clean()
 
-
+    @skip
     def test_duplicate_items_are_invalid(self):
         list_ = List.objects.create()
         Item.objects.create(list=list_, text='bla')
